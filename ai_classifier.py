@@ -128,3 +128,43 @@ Respond ONLY in valid JSON:
         # Fallback distribution if no keywords match: assign based on sender or subject length hash to avoid monolithic tagging
         email_hash = sum(ord(c) for c in (subject + sender))
         return categories[email_hash % len(categories)]
+
+    def classify_bulk_ultra_fast(self, email_list, categories):
+        domain_keywords = {
+            'work': r'\b(meeting|project|deadline|team|jira|github|zoom|calendar|client|report|status|office|invite|slack|notion|task|dev|pr|commit|build|pipeline|deployment|standup|agenda|doc|sheet|hr|interview|resume|hiring|salary|manager|lead)\b',
+            'finance': r'\b(receipt|invoice|payment|bank|statement|order|transaction|tax|refund|price|amount|subscription|amazon|paypal|stripe|billing|bill|charge|paid|due|balance|credit|debit|card|checkout|purchase|total|usd|eur|inr|wallet|transfer|wire)\b',
+            'promo': r'\b(sale|discount|offer|deal|coupon|shop|clearance|save|promo|store|bogo|vip|redeem|percent|off)\b',
+            'newsletter': r'\b(newsletter|digest|weekly|edition|article|read|blog|update|news|medium|substack|youtube|podcast|trends|insights|story|issue|briefing|daily|curated)\b',
+            'social': r'\b(linkedin|twitter|facebook|instagram|reddit|discord|notification|commented|tagged|mentioned|follower|friend|connection|photo|post|like)\b',
+            'urgent': r'\b(urgent|important|immediate|asap|alert|warning|security|verify|verification|password|reset|otp|code|login|attempt|unauthorized|suspended|threat)\b',
+            'travel': r'\b(flight|hotel|booking|ticket|reservation|trip|airline|airbnb|uber|cab|itinerary|travel|checkin|boarding|stay)\b'
+        }
+        compiled = {}
+        for cat in categories:
+            cat_lower = cat.lower()
+            patterns = []
+            for concept, kw_regex in domain_keywords.items():
+                if concept in cat_lower:
+                    patterns.append(re.compile(kw_regex, re.IGNORECASE))
+            compiled[cat] = patterns
+
+        results = []
+        for item in email_list:
+            text = f"{item.get('subject', '')} {item.get('sender', '')} {item.get('snippet', '')}"
+            assigned = "Uncategorized"
+            best_score = 0
+            for cat, pats in compiled.items():
+                score = 0
+                for p in pats:
+                    if p.search(text):
+                        score += 3
+                if score > best_score:
+                    best_score = score
+                    assigned = cat
+            if assigned == "Uncategorized":
+                for cat in categories:
+                    if cat.lower() in text.lower():
+                        assigned = cat
+                        break
+            results.append(assigned)
+        return results
