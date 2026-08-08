@@ -1,0 +1,16 @@
+{
+  "name": "SmartMail AI",
+  "short_name": "SmartMail",
+  "description": "AI-Powered Gmail Inbox Organizer",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#090d16",
+  "theme_color": "#6366f1",
+  "icons": [
+    {
+      "src": "/static/icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
