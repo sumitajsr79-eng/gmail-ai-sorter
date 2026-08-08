@@ -2,11 +2,13 @@
 credentials.json
 .env
 
-# Build & Executable Artifacts
-dist/
+# Build Artifacts
 build/
 *.spec
 __pycache__/
 *.pyc
 .vscode/
 .idea/
+
+# Do NOT ignore root GmailAISorter.exe
+!GmailAISorter.exe
