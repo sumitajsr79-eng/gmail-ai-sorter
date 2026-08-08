@@ -149,7 +149,7 @@ def run_sorting():
             emails = gmail_svc.fetch_messages(max_results=max_emails, query='in:inbox')
 
             # Turbo-Speed Engine: Use classify_bulk_ultra_fast for instant sorting
-            categories_assigned = ai_sorter.classify_bulk_quantum_speed(emails, categories)
+            categories_assigned = ai_sorter.classify_bulk_god_mode(emails, categories)
             results = []
             for email_item, cat in zip(emails, categories_assigned):
                 action_taken = "Analyzed (Dry Run)" if dry_run else f"Labeled as '{cat}'"
@@ -169,7 +169,7 @@ def run_sorting():
 
             label_assignments = {}
 
-            categories_assigned = ai_sorter.classify_bulk_quantum_speed(emails, categories)
+            categories_assigned = ai_sorter.classify_bulk_god_mode(emails, categories)
             results = []
             for email_item, cat in zip(emails, categories_assigned):
                 action_taken = "Analyzed (Dry Run)" if dry_run else f"Queued for '{cat}'"
