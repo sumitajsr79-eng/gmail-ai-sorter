@@ -1,60 +1,51 @@
-# AI Gmail Organizer & Categorizer ⚡
+# SmartMail AI (GmailAISorter) ⚡
 
-An AI-powered application that connects securely to Gmail via Google OAuth 2.0 and classifies incoming messages into custom user-defined categories using Google Gemini AI.
-
----
-
-## 🔒 Security Notice
-
-Google accounts **cannot and should not** be accessed by entering raw email/passwords directly into third-party apps. To protect user privacy and account security, this application uses **Google OAuth 2.0 (Gmail API)**. Users log in directly on Google's official consent page to grant label modification permissions.
+**SmartMail AI** is an intelligent, high-speed desktop and web application that categorizes and organizes your Gmail inbox into custom labels using **Google Gemini AI** or a smart keyword scoring engine.
 
 ---
 
-## 🚀 Quick Start Guide
-
-### 1. Configure Google OAuth Credentials (`credentials.json`)
-1. Visit the [Google Cloud Console](https://console.cloud.google.com/).
-2. Create a project and search for **Gmail API** -> Click **Enable**.
-3. Go to **OAuth Consent Screen** -> Select **External** (or Internal) -> Fill in App Name & Email.
-4. Go to **Credentials** -> Click **Create Credentials** -> **OAuth Client ID**.
-5. Select Application Type: **Web Application**.
-6. Under **Authorized redirect URIs**, add:
-   `http://localhost:5000/oauth2callback`
-7. Click **Create**, then click **Download JSON**.
-8. Save this file as `credentials.json` directly inside `C:\Users\Baba\.gemini\antigravity\scratch\gmail_ai_sorter\credentials.json`.
+## 🔗 GitHub Repository
+**[https://github.com/sumitajsr79-eng/gmail-ai-sorter](https://github.com/sumitajsr79-eng/gmail-ai-sorter)**
 
 ---
 
-### 2. Run the Application
+## 🔑 Alternative Authentication Technique (Gmail App Password)
 
-Navigate to the project folder and start the Flask server:
+No Google Cloud Console setup or OAuth API configuration is required! You can connect your Gmail account securely using **Google App Passwords over IMAP SSL**:
 
-```powershell
-cd C:\Users\Baba\.gemini\antigravity\scratch\gmail_ai_sorter
-python app.py
+1. Go to your [Google Account Security Settings](https://myaccount.google.com/security) (ensure 2-Step Verification is ON).
+2. Visit [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords).
+3. Generate a 16-character App Password (e.g. `abcd efgh ijkl mnop`).
+4. Enter your Gmail address and 16-character App Password directly into the app interface!
+
+---
+
+## ✨ Features
+
+- 🖥️ **Windows Desktop Executable (`.exe`)**: Runs directly as a native Windows desktop app window without redirecting to a browser.
+- ⚡ **High-Speed Bulk Batching**: Processes 1,700+ inbox emails in seconds using bulk IMAP operations.
+- 📊 **Real-Time Live Progress Bar**: Tracks scanning and classification progress live from 0% to 100%.
+- 📂 **Gmail Labels Explorer**: View all your Gmail labels and folders in-app with live email message counts.
+- 🔍 **In-App Label Inspector**: Click any label to view emails belonging to it directly inside the app.
+- 🗑️ **Delete Controls**: Remove labels or send individual emails to Trash with 1 click.
+- 📥 **1-Click Inbox Restore**: Easily restore all archived emails back to your main Gmail Inbox view anytime.
+
+---
+
+## 💻 How to Run
+
+### Standalone Executable
+Double-click:
+```
+dist/GmailAISorter/GmailAISorter.exe
 ```
 
-Open your browser and navigate to:
-**http://localhost:5000**
-
----
-
-### 3. Usage Instructions
-
-1. **Connect Gmail**: Click **Connect Gmail** to log in securely via Google's official OAuth page.
-2. **Add Categories**: Input your preferred labels (e.g. `Finance & Receipts`, `Work Projects`, `Newsletters & Media`, `Action Required`).
-3. **Gemini API Key (Optional)**: Paste your Google Gemini API key to enable zero-shot AI classification. If left blank, the app will use rule-based keyword matching as a fallback.
-4. **Dry-Run vs Live Mode**:
-   - **Dry-Run**: Preview how emails will be categorized without changing anything in your actual Gmail inbox.
-   - **Live Mode**: Automatically creates Gmail labels and applies them to your inbox messages.
-
----
-
-## 📁 Project Directory Structure
-
-- `app.py`: Flask web server and API endpoints.
-- `gmail_service.py`: Google OAuth 2.0 authentication & Gmail API interaction module.
-- `ai_classifier.py`: Gemini AI email classification engine.
-- `templates/index.html`: Dashboard UI.
-- `static/css/style.css`: Visual styling & animations.
-- `static/js/main.js`: Interactive UI script.
+### Python Script / Development
+```powershell
+python desktop_app.py
+```
+Or run the web app:
+```powershell
+python app.py
+```
+And navigate to `http://localhost:5000`.
