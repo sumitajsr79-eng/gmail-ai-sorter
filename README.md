@@ -4,26 +4,22 @@
 
 ---
 
-## 📱 Android App & APK Build
+## 📥 Downloads (Direct Repo Links)
+
+| Platform | Download Link | File |
+| :--- | :--- | :--- |
+| 📱 **Android App** | 👉 [**Download GmailAISorter.apk**](https://github.com/sumitajsr79-eng/gmail-ai-sorter/raw/master/GmailAISorter.apk) | `GmailAISorter.apk` |
+| 💻 **Windows Desktop** | 👉 [**Download GmailAISorter.exe (59.5 MB)**](https://github.com/sumitajsr79-eng/gmail-ai-sorter/raw/master/GmailAISorter.exe) | `GmailAISorter.exe` |
+
+> 💡 **Android Installation:** Download [`GmailAISorter.apk`](https://github.com/sumitajsr79-eng/gmail-ai-sorter/raw/master/GmailAISorter.apk) directly to your Android device, tap to install, and launch SmartMail AI!
+
+---
+
+## 📱 Android App & Build Pipeline
 
 The repository includes a complete native Android application project (`android/`) and an automated **GitHub Actions CI/CD Build Pipeline** (`.github/workflows/build-apk.yml`):
+- Whenever code is updated, GitHub Actions automatically compiles the Android package and commits [`GmailAISorter.apk`](https://github.com/sumitajsr79-eng/gmail-ai-sorter/raw/master/GmailAISorter.apk) directly to the repository root.
 
-### 1. Automated APK Compilation on GitHub Actions
-Whenever code is pushed to this repository, GitHub Actions automatically compiles the Android APK using JDK 17 & Android SDK.
-- You can download the generated `SmartMailAI-Android-APK` directly from the **[GitHub Actions Tab](https://github.com/sumitajsr79-eng/gmail-ai-sorter/actions)**.
-
-### 2. Progressive Web App (PWA) Install on Android
-- Open `SmartMail AI` in Chrome or Edge on your Android phone.
-- Tap **"Install App"** / **"Add to Home Screen"** to install it directly as a mobile app icon!
-
----
-
-## 💻 Download Windows Desktop Executable (`.exe`)
-The compiled standalone executable is available directly in the root of this GitHub repository:
-
-👉 **[Download GmailAISorter.exe (59.5 MB)](https://github.com/sumitajsr79-eng/gmail-ai-sorter/raw/master/GmailAISorter.exe)**
-
----
 
 ## 🔑 Authentication (Gmail App Password)
 
