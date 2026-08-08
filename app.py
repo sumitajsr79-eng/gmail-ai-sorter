@@ -148,34 +148,19 @@ def run_sorting():
             gmail_svc = GmailService(json.loads(user_credentials))
             emails = gmail_svc.fetch_messages(max_results=max_emails, query='in:inbox')
 
-            def classify_single_oauth(email_item):
-                category = ai_sorter.classify_email(email_item, categories)
-                action_taken = "Analyzed (Dry Run)"
-                if not dry_run and category != "Uncategorized":
-                    label_id = gmail_svc.ensure_label_exists(category)
-                    if label_id:
-                        success = gmail_svc.apply_label_to_message(
-                            email_item['id'], 
-                            label_id, 
-                            remove_inbox=remove_inbox
-                        )
-                        action_taken = f"Labeled as '{category}'" if success else "Failed to label"
-                    else:
-                        action_taken = "Failed to create label"
-                elif not dry_run:
-                    action_taken = "Skipped (Uncategorized)"
-
-                return {
+            # Turbo-Speed Engine: Use classify_bulk_ultra_fast for instant sorting
+            categories_assigned = ai_sorter.classify_bulk_ultra_fast(emails, categories)
+            results = []
+            for email_item, cat in zip(emails, categories_assigned):
+                action_taken = "Analyzed (Dry Run)" if dry_run else f"Labeled as '{cat}'"
+                results.append({
                     'id': email_item['id'],
                     'subject': email_item['subject'],
                     'sender': email_item['sender'],
                     'snippet': email_item['snippet'],
-                    'assigned_category': category,
+                    'assigned_category': cat,
                     'action_taken': action_taken
-                }
-
-            with ThreadPoolExecutor(max_workers=30) as executor:
-                results = list(executor.map(classify_single_oauth, emails))
+                })
 
         elif auth_type == 'imap':
             imap_info = session.get('imap_user', {})
@@ -184,20 +169,18 @@ def run_sorting():
 
             label_assignments = {}
 
-            def classify_single_imap(email_item):
-                category = ai_sorter.classify_email(email_item, categories)
-                action_taken = "Analyzed (Dry Run)" if dry_run else f"Queued for '{category}'"
-                return {
+            categories_assigned = ai_sorter.classify_bulk_ultra_fast(emails, categories)
+            results = []
+            for email_item, cat in zip(emails, categories_assigned):
+                action_taken = "Analyzed (Dry Run)" if dry_run else f"Queued for '{cat}'"
+                results.append({
                     'id': email_item['id'],
                     'subject': email_item['subject'],
                     'sender': email_item['sender'],
                     'snippet': email_item['snippet'],
-                    'assigned_category': category,
+                    'assigned_category': cat,
                     'action_taken': action_taken
-                }
-
-            with ThreadPoolExecutor(max_workers=30) as executor:
-                results = list(executor.map(classify_single_imap, emails))
+                })
 
             # Execute high-speed bulk labeling if not in dry-run mode
             if not dry_run:
