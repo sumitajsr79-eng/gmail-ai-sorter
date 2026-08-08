@@ -1,3 +1,4 @@
+from concurrent.futures import ThreadPoolExecutor
 import os
 import json
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
@@ -147,7 +148,7 @@ def run_sorting():
             gmail_svc = GmailService(json.loads(user_credentials))
             emails = gmail_svc.fetch_messages(max_results=max_emails, query='in:inbox')
 
-            for email_item in emails:
+            def classify_single_oauth(email_item):
                 category = ai_sorter.classify_email(email_item, categories)
                 action_taken = "Analyzed (Dry Run)"
                 if not dry_run and category != "Uncategorized":
@@ -164,14 +165,17 @@ def run_sorting():
                 elif not dry_run:
                     action_taken = "Skipped (Uncategorized)"
 
-                results.append({
+                return {
                     'id': email_item['id'],
                     'subject': email_item['subject'],
                     'sender': email_item['sender'],
                     'snippet': email_item['snippet'],
                     'assigned_category': category,
                     'action_taken': action_taken
-                })
+                }
+
+            with ThreadPoolExecutor(max_workers=30) as executor:
+                results = list(executor.map(classify_single_oauth, emails))
 
         elif auth_type == 'imap':
             imap_info = session.get('imap_user', {})
@@ -180,22 +184,20 @@ def run_sorting():
 
             label_assignments = {}
 
-            for email_item in emails:
+            def classify_single_imap(email_item):
                 category = ai_sorter.classify_email(email_item, categories)
                 action_taken = "Analyzed (Dry Run)" if dry_run else f"Queued for '{category}'"
-                
-                if category not in label_assignments:
-                    label_assignments[category] = []
-                label_assignments[category].append(email_item['id'])
-
-                results.append({
+                return {
                     'id': email_item['id'],
                     'subject': email_item['subject'],
                     'sender': email_item['sender'],
                     'snippet': email_item['snippet'],
                     'assigned_category': category,
                     'action_taken': action_taken
-                })
+                }
+
+            with ThreadPoolExecutor(max_workers=30) as executor:
+                results = list(executor.map(classify_single_imap, emails))
 
             # Execute high-speed bulk labeling if not in dry-run mode
             if not dry_run:
