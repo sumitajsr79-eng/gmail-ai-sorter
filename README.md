@@ -5,12 +5,9 @@
 ---
 
 ## 💻 Download Windows Desktop Executable (`.exe`)
-The compiled standalone executable is available directly in this GitHub repository:
+The compiled standalone executable is available directly in the root of this GitHub repository:
 
-👉 **[Download GmailAISorter.exe directly from repo](https://github.com/sumitajsr79-eng/gmail-ai-sorter/blob/master/GmailAISorter.exe?raw=true)**
-
-Or download from Releases:
-👉 **[SmartMail AI v1.0.0 Release Package (.zip)](https://github.com/sumitajsr79-eng/gmail-ai-sorter/releases/tag/v1.0.0)**
+👉 **[Download GmailAISorter.exe (59.5 MB)](https://github.com/sumitajsr79-eng/gmail-ai-sorter/raw/master/GmailAISorter.exe)**
 
 ---
 
@@ -34,3 +31,14 @@ No Google Cloud Console setup or OAuth API configuration is required! You can co
 - 🔍 **In-App Label Inspector**: Click any label to view emails belonging to it directly inside the app.
 - 🗑️ **Delete Controls**: Remove labels or send individual emails to Trash with 1 click.
 - 📥 **1-Click Inbox Restore**: Easily restore all archived emails back to your main Gmail Inbox view anytime.
+
+---
+
+## 📂 Repository Contents
+
+- `GmailAISorter.exe`: Compiled Windows Desktop standalone application.
+- `desktop_app.py`: Desktop application wrapper powered by PyWebView & Edge Chromium engine.
+- `app.py`: Backend server & REST API endpoints.
+- `imap_service.py`: High-speed Gmail IMAP SSL batching service.
+- `ai_classifier.py`: Google Gemini AI & domain keyword scoring engine.
+- `templates/index.html` & `static/`: Glassmorphic desktop interface, styling, and JavaScript logic.
