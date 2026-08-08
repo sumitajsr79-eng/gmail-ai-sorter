@@ -1,0 +1,12 @@
+# Credentials & Security
+credentials.json
+.env
+
+# Build & Executable Artifacts
+dist/
+build/
+*.spec
+__pycache__/
+*.pyc
+.vscode/
+.idea/
