@@ -9,6 +9,11 @@
 
 ---
 
+## 📦 Download Desktop Executable (.exe)
+**[👉 Click Here to Download SmartMail AI v1.0.0 for Windows (.zip)](https://github.com/sumitajsr79-eng/gmail-ai-sorter/releases/tag/v1.0.0)**
+
+---
+
 ## 🔑 Alternative Authentication Technique (Gmail App Password)
 
 No Google Cloud Console setup or OAuth API configuration is required! You can connect your Gmail account securely using **Google App Passwords over IMAP SSL**:
