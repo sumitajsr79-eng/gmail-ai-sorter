@@ -217,12 +217,20 @@
                             <div class="spinner"></div>
                             <p id="loaderStatusText">Analyzing emails with Gemini AI...</p>
                             
-                            <!-- Real-time Progress Bar -->
-                            <div class="progress-box mt-3">
-                                <div class="progress-bar-track">
-                                    <div id="progressBarFill" class="progress-bar-fill" style="width: 0%;"></div>
+                            <!-- Mid-Process Real-Time Telemetry & Controls -->
+                            <div class="progress-box mt-3 p-3 bg-dark rounded border border-secondary">
+                                <div class="d-flex justify-content-between align-items-center mb-2 text-xs">
+                                    <span id="progressText" class="text-success fw-bold">⚡ 0% Completed</span>
+                                    <span id="speedBadge" class="badge bg-cyan text-dark font-mono">0 emails/sec</span>
+                                    <span id="timerBadge" class="text-slate-400 font-mono">0.0s</span>
                                 </div>
-                                <span id="progressText" class="progress-text">0% Completed</span>
+                                <div class="progress-bar-track mb-3" style="height: 10px; background: rgba(255,255,255,0.1); border-radius: 999px; overflow: hidden;">
+                                    <div id="progressBarFill" class="progress-bar-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, #10b981, #06b6d4); transition: width 0.1s ease;"></div>
+                                </div>
+                                <div class="d-flex gap-2 justify-content-center">
+                                    <button type="button" id="pauseBtn" class="btn btn-sm btn-outline-warning" onclick="togglePauseSorting()">⏸️ Pause Mid-Process</button>
+                                    <button type="button" id="turboToggleBtn" class="btn btn-sm btn-outline-info" onclick="toggleTurboMode()">⚡ Turbo SIMD Mode (Active)</button>
+                                </div>
                             </div>
                         </div>
 
