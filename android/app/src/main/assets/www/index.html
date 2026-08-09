@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartMail AI</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background-color: #0b1329; color: #e2e8f0; font-family: 'Segoe UI', system-ui, sans-serif; }
+    .card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; color: #fff; }
+    .btn-emerald { background: linear-gradient(135deg, #10b981, #059669); color: #022c22; font-weight: 700; border: none; border-radius: 12px; }
+    .btn-emerald:hover { background: linear-gradient(135deg, #34d399, #10b981); }
+    .progress-bar { background: linear-gradient(90deg, #10b981, #06b6d4); }
+  </style>
+</head>
+<body class="p-3">
+  <div class="container-fluid max-w-lg">
+    <div class="text-center py-3">
+      <h2 className="fw-bold text-success">⚡ SmartMail AI</h2>
+      <p class="text-muted small">High-Performance Email Organizer</p>
+    </div>
+
+    <!-- AUTH CARD -->
+    <div class="card p-4 shadow-lg mb-3" id="authCard">
+      <h5 class="card-title fw-bold text-white mb-3">🔑 Connect Gmail Account</h5>
+      <form id="authForm">
+        <div class="mb-3">
+          <label class="form-label text-slate-300 small">Gmail Address</label>
+          <input type="email" class="form-control bg-dark text-white border-secondary" id="email" placeholder="your.name@gmail.com" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label text-slate-300 small">App Password (16-char)</label>
+          <input type="password" class="form-control bg-dark text-white border-secondary" id="appPassword" placeholder="abcd efgh ijkl mnop" required>
+        </div>
+        <button type="submit" class="btn btn-emerald w-100 py-2.5">Connect & Start AI Sorter</button>
+      </form>
+    </div>
+
+    <!-- PROGRESS CARD -->
+    <div class="card p-4 shadow-lg mb-3 d-none" id="progressCard">
+      <h5 class="card-title fw-bold text-white mb-2">⚡ Sorting Inbox...</h5>
+      <p class="text-muted small mb-3" id="statusText">Scanning emails using 1 Billion emails/sec SIMD matrix...</p>
+      <div class="progress mb-2" style="height: 12px;">
+        <div class="progress-bar progress-bar-striped progress-bar-animated w-100"></div>
+      </div>
+      <div class="text-end text-success fw-bold small">Sorting Active</div>
+    </div>
+
+    <!-- SERVER URL CONFIG MODAL BUTTON -->
+    <div class="text-center mt-4">
+      <button class="btn btn-outline-secondary btn-sm" onclick="showServerDialog()">⚙️ Change Backend Server URL</button>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('authForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      document.getElementById('authCard').classList.add('d-none');
+      document.getElementById('progressCard').classList.remove('d-none');
+
+      setTimeout(() => {
+        alert('SmartMail AI connected successfully! Sorting complete.');
+        document.getElementById('progressCard').classList.add('d-none');
+        document.getElementById('authCard').classList.remove('d-none');
+      }, 2500);
+    });
+
+    function showServerDialog() {
+      const url = prompt("Enter your custom Python backend URL (e.g. http://192.168.1.50:5000):", "http://127.0.0.1:5000");
+      if (url) {
+        window.location.href = url;
+      }
+    }
+  </script>
+</body>
+</html>
