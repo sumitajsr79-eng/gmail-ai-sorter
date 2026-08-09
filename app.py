@@ -280,3 +280,77 @@ def delete_email():
 if __name__ == '__main__':
     print("Starting AI Gmail Organizer App on http://localhost:5000")
     app.run(host='127.0.0.1', port=5000, debug=True)
+
+@app.route('/api/stream_sorting', methods=['GET', 'POST'])
+def stream_sorting():
+    """
+    Mid-Process Real-Time Live Streaming Engine (Server-Sent Events).
+    Streams live email classification results, speed telemetry, and progress updates mid-process!
+    """
+    auth_type = session.get('auth_type')
+    if not auth_type:
+        return jsonify({'error': 'Not authenticated'}), 401
+
+    dry_run = request.args.get('dry_run', 'true').lower() == 'true'
+    max_emails = int(request.args.get('max_emails', '0'))
+    remove_inbox = request.args.get('remove_inbox', 'false').lower() == 'true'
+
+    categories = session.get('categories', DEFAULT_CATEGORIES)
+    gemini_key = session.get('gemini_api_key', os.environ.get('GEMINI_API_KEY', ''))
+    ai_sorter = AIEmailClassifier(api_key=gemini_key)
+
+    def generate_events():
+        import time
+        t0 = time.time()
+
+        if auth_type == 'imap':
+            imap_info = session.get('imap_user', {})
+            imap_svc = IMAPGmailService(imap_info.get('email'), imap_info.get('app_password'))
+            emails = imap_svc.fetch_messages(max_results=max_emails)
+        else:
+            user_credentials = session.get('credentials')
+            gmail_svc = GmailService(json.loads(user_credentials))
+            emails = gmail_svc.fetch_messages(max_results=max_emails, query='in:inbox')
+
+        total = len(emails)
+        yield f"data: {json.dumps({'type': 'init', 'total': total})}\n\n"
+
+        categories_assigned = ai_sorter.classify_bulk_god_mode(emails, categories)
+        label_assignments = {}
+
+        for idx, (email_item, cat) in enumerate(zip(emails, categories_assigned)):
+            action = "Analyzed (Dry Run)" if dry_run else f"Labeled as '{cat}'"
+            if cat not in label_assignments:
+                label_assignments[cat] = []
+            label_assignments[cat].append(email_item['id'])
+
+            elapsed = max(0.001, time.time() - t0)
+            processed_count = idx + 1
+            speed_eps = round(processed_count / elapsed)
+
+            event_payload = {
+                'type': 'progress',
+                'processed': processed_count,
+                'total': total,
+                'percentage': round((processed_count / total) * 100, 1) if total > 0 else 100,
+                'speed_eps': f"{speed_eps:,} emails/sec",
+                'elapsed_seconds': round(elapsed, 2),
+                'item': {
+                    'id': email_item['id'],
+                    'subject': email_item['subject'],
+                    'sender': email_item['sender'],
+                    'snippet': email_item['snippet'],
+                    'assigned_category': cat,
+                    'action_taken': action
+                }
+            }
+            yield f"data: {json.dumps(event_payload)}\n\n"
+
+        if not dry_run and auth_type == 'imap':
+            imap_svc.batch_apply_labels(label_assignments, remove_inbox=remove_inbox)
+
+        total_time = round(time.time() - t0, 2)
+        yield f"data: {json.dumps({'type': 'complete', 'total': total, 'time_seconds': total_time})}\n\n"
+
+    from flask import Response
+    return Response(generate_events(), mimetype='text/event-stream')
